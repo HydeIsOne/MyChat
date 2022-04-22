@@ -39,10 +39,10 @@ public class Database {
         }
     }
 
-    public static void prepareAllStatement() throws SQLException {
-        createUserStatement = connection.prepareStatement("INSERT INTO user (login, password, nickname) VALUES (?, ?, ?);");
-        getUserNicknameStatement = connection.prepareStatement("SELECT nickname FROM user WHERE login = ? AND password = ?;");
-    }
+//    public static void prepareAllStatement() throws SQLException {
+//        createUserStatement = connection.prepareStatement("INSERT INTO user (login, password, nickname) VALUES (?, ?, ?);");
+//        getUserNicknameStatement = connection.prepareStatement("SELECT nickname FROM user WHERE login = ? AND password = ?;");
+//    }
 
     public static void createUser(String login, String password, String nickname) {
         try {
@@ -64,6 +64,8 @@ public class Database {
             ResultSet rs = getUserNicknameStatement.executeQuery();
             if (rs.next()) {
                 nickname = rs.getString(1);
+            } else {
+                nickname = "null";
             }
             rs.close();
         } catch (SQLException e) {

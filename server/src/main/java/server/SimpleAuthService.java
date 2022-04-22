@@ -45,7 +45,6 @@ public class SimpleAuthService implements AuthService {
                 return false;
             }
         }
-        users.add(new UserData(login, password, nickname));
         return true;
     }
 }
