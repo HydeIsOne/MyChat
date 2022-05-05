@@ -221,7 +221,7 @@ public class Controller implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/reg.fxml"));
             Parent root = fxmlLoader.load();
             regStage = new Stage();
-            regStage.setTitle("Magic chat registration");
+            regStage.setTitle("MyChat registration");
             regStage.setScene(new Scene(root, 500, 425));
 
             regStage.initModality(Modality.APPLICATION_MODAL);

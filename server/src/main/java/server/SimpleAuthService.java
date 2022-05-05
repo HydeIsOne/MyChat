@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleAuthService implements AuthService {
-    private class UserData {
+    class UserData {
         String login;
         String password;
         String nickname;
@@ -45,7 +45,6 @@ public class SimpleAuthService implements AuthService {
                 return false;
             }
         }
-        users.add(new UserData(login, password, nickname));
         return true;
     }
 }
