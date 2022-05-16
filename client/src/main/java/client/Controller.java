@@ -20,11 +20,11 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import service.ServiceMessages;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -111,6 +111,7 @@ public class Controller implements Initializable {
                             if (str.startsWith(ServiceMessages.AUTH_OK)) {
                                 nickname = str.split(" ")[1];
                                 setAuthenticated(true);
+                                loadHistory();
                                 break;
                             }
                             if (str.startsWith("/reg")) {
@@ -144,6 +145,8 @@ public class Controller implements Initializable {
 
                         } else {
                             textArea.appendText(str + "\n");
+                            saveClientHistory();
+                            saveChatHistory();
                         }
                     }
                 } catch (IOException e) {
@@ -244,6 +247,55 @@ public class Controller implements Initializable {
             out.writeUTF(msg);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    public void saveClientHistory() {
+        try {
+            String fileName = "history_" + nickname + ".txt";
+            File userHistory = new File(fileName);
+
+            PrintWriter fileWriter1 = new PrintWriter(new FileWriter(userHistory, false));
+
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter1);
+            bufferedWriter.write(textArea.getText());
+            bufferedWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveChatHistory() {
+        try {
+            File chatHistory = new File("history.txt");
+            PrintWriter fileWriter2 = new PrintWriter(new FileWriter(chatHistory, false));
+            BufferedWriter bufferedWriter2 = new BufferedWriter(fileWriter2);
+            bufferedWriter2.write(textArea.getText());
+            bufferedWriter2.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadHistory() throws IOException {
+        int maxLines = 100;
+        List<String> historyList = new ArrayList<>();
+        FileInputStream in = new FileInputStream("history.txt");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+
+        String temp;
+        while ((temp = bufferedReader.readLine()) != null) {
+            if (historyList.size() == maxLines) {
+                historyList.remove(0);
+            }
+            historyList.add(temp);
+        }
+
+        for (String s : historyList) {
+            textArea.appendText(s + "\n");
         }
     }
 }
