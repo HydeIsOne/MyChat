@@ -1,3 +1,5 @@
+package homework4;
+
 public class WaitNotifyApp {
     private final Object mon = new Object();
     private volatile char currentLetter = 'A';
