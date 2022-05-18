@@ -9,7 +9,11 @@
         <module name="server" />
         <module name="client" />
         <module name="protocol" />
+        <module name="hw" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="homework" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
