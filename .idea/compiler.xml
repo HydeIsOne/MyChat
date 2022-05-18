@@ -11,5 +11,8 @@
         <module name="protocol" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="homework" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

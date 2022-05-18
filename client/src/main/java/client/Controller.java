@@ -81,7 +81,7 @@ public class Controller implements Initializable {
                 System.out.println("bye");
                 if (socket != null && !socket.isClosed()) {
                     try {
-                        out.writeUTF("/end");
+                        out.writeUTF(ServiceMessages.END);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -105,7 +105,7 @@ public class Controller implements Initializable {
                         String str = in.readUTF();
 
                         if (str.startsWith("/")) {
-                            if (str.equals("/end")) {
+                            if (str.equals(ServiceMessages.END)) {
                                 break;
                             }
                             if (str.startsWith(ServiceMessages.AUTH_OK)) {
@@ -114,7 +114,7 @@ public class Controller implements Initializable {
                                 loadHistory();
                                 break;
                             }
-                            if (str.startsWith("/reg")) {
+                            if (str.startsWith(ServiceMessages.REG)) {
                                 regController.regStatus(str);
                             }
 
@@ -129,11 +129,11 @@ public class Controller implements Initializable {
                         String str = in.readUTF();
 
                         if (str.startsWith("/")) {
-                            if (str.equals("/end")) {
+                            if (str.equals(ServiceMessages.END)) {
                                 setAuthenticated(false);
                                 break;
                             }
-                            if (str.startsWith("/clientlist")) {
+                            if (str.startsWith(ServiceMessages.CLIENT_LIST)) {
                                 String[] token = str.split(" ");
                                 Platform.runLater(() -> {
                                     clientList.getItems().clear();
@@ -209,7 +209,7 @@ public class Controller implements Initializable {
 
     public void clickClientList(MouseEvent mouseEvent) {
         String receiver = clientList.getSelectionModel().getSelectedItem();
-        textField.setText("/w " + receiver + " ");
+        textField.setText(ServiceMessages.W + receiver + " ");
     }
 
     public void clickBtnReg(ActionEvent actionEvent) {

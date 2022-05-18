@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
     private ServerSocket server;
@@ -20,6 +22,7 @@ public class Server {
 
     private List<ClientHandler> clients;
     private AuthService authService;
+    private ExecutorService clientsExecutorService;
 
     public Server() {
         clients = new CopyOnWriteArrayList<>();
@@ -27,6 +30,7 @@ public class Server {
         Database.connect();
 
         authService = new DatabaseAuthService();
+        clientsExecutorService = Executors.newCachedThreadPool();
 
         try {
             server = new ServerSocket(PORT);
@@ -42,6 +46,7 @@ public class Server {
         } finally {
             System.out.println("Server stop");
             try {
+                clientsExecutorService.shutdown();
                 Database.disconnect();
                 server.close();
             } catch (IOException e) {
@@ -106,5 +111,9 @@ public class Server {
 
     public AuthService getAuthService() {
         return authService;
+    }
+
+    public ExecutorService getClientsExecutorService() {
+        return clientsExecutorService;
     }
 }
