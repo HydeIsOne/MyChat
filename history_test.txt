@@ -5,3 +5,4 @@
 [ qwe ]: BRO
 [ test ] to [ qwe ]: yes
 [ test ]: 123
+[ test ]: TEST

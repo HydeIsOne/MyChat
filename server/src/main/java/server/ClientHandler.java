@@ -1,5 +1,6 @@
 package server;
 
+import com.sun.security.ntlm.Client;
 import service.ServiceMessages;
 
 import java.io.DataInputStream;
@@ -8,6 +9,10 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientHandler {
     private Server server;
@@ -17,8 +22,14 @@ public class ClientHandler {
     private boolean authenticated;
     private String nickname;
     private String login;
+    private static final Logger logger = Logger.getLogger(Client.class.getName());
 
     public ClientHandler(Server server, Socket socket) {
+        logger.setLevel(Level.ALL);
+        Handler handler = new ConsoleHandler();
+        handler.setLevel(Level.ALL);
+        logger.addHandler(handler);
+
         this.server = server;
         this.socket = socket;
 
@@ -40,6 +51,7 @@ public class ClientHandler {
                         }
 
                         if (str.startsWith(ServiceMessages.AUTH)) {
+                            logger.log(Level.FINE, "User is trying to authenticate");
                             String[] token = str.split(" ", 3);
                             if (token.length < 3) {
                                 continue;

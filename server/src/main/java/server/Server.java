@@ -14,6 +14,10 @@ import java.util.Scanner;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Server {
     private ServerSocket server;
@@ -23,8 +27,14 @@ public class Server {
     private List<ClientHandler> clients;
     private AuthService authService;
     private ExecutorService clientsExecutorService;
+    private static final Logger logger = Logger.getLogger(Server.class.getName());
 
     public Server() {
+        logger.setLevel(Level.ALL);
+        Handler handler = new ConsoleHandler();
+        handler.setLevel(Level.ALL);
+        logger.addHandler(handler);
+
         clients = new CopyOnWriteArrayList<>();
 
         Database.connect();
@@ -45,6 +55,7 @@ public class Server {
             e.printStackTrace();
         } finally {
             System.out.println("Server stop");
+            logger.log(Level.INFO, "Server closed");
             try {
                 clientsExecutorService.shutdown();
                 Database.disconnect();
@@ -66,6 +77,7 @@ public class Server {
     }
 
     public void broadcastMsg(ClientHandler sender, String msg) {
+        logger.log(Level.FINEST,"User " + sender + " sent a message");
         String message = String.format("[ %s ]: %s", sender.getNickname(), msg);
         for (ClientHandler c : clients) {
             c.sendMsg(message);
